@@ -17,9 +17,10 @@ function fishit
   source $t2
   or return 1
   for f in $(cat $t2 | grep ^function | cut -d' ' -f2)
+    functions -H | grep -q $f; and continue
     funcsave -d $outdir/functions $f
+    sed -i "/^function\s*$f/,/^end/d" $t2
   end
-  sed -i '/^function/,/^end/d' $t2
   grep -q ^complete $t2
   and grep ^complete $t2 > $outdir/completions/$plugname
   grep -qv ^complete $t2
